@@ -55,11 +55,27 @@ console.log(secret);        // CryptoKey
 | ES512       | ✔️          |
 | EdDSA       | ❌          |
 
-## API
-### `generateSecret(algorithm)`
-* generates and returns a secret key
-* `algorithm` must be either one of the following algorithms: `HS256`, `HS384`, `HS512`, `A128KW`, `A192KW`, `A256KW`, `A128GCM`, `A192GCM`, `A256GCM`, `A128GCMKW`, `A192GCMKW`, or `A256GCMKW`.
+See [RFC 7518](https://datatracker.ietf.org/doc/html/rfc7518) for a detailed description of the algorithms.
 
-### `generateKeyPair(algorithm)`
-* generates and returns a public/private keypair
-* * `algorithm` must be either one of the following algorithms: `RS256`, `RS384`, `RS512`, `PS256`, `PS384`, `PS512`, `RSA-OAEP`, `RSA-OAEP-256`, `RSA-OAEP-384`, or `RSA-OAEP-512`.
+## API
+### `generateSecret(algorithm, extractable=true)`
+* generates and returns a secret key
+* **Parameters:**
+  * **algorithm** (`<string>`)
+    * JWT algorithm
+    * must be either one of the following algorithms: `HS256`, `HS384`, `HS512`, `A128KW`, `A192KW`, `A256KW`, `A128GCM`, `A192GCM`, `A256GCM`, `A128GCMKW`, `A192GCMKW`, or `A256GCMKW`.
+  * **extractable** (`<boolean>`) (default: _true_)
+    * when `true`, the returned `CryptoKey` can be exported to other formats (i.e. `raw`, `pkcs8`, `spki`, or `jwk`)
+* **Returns:**
+  * **key** (`<CryptoKey>`)
+
+### `generateKeyPair(algorithm, extractable=true)`
+* generates and returns a public/private key pair
+* **Parameters:**
+  * **algorithm** (`<string>`)
+    * JWT algorithm
+    * must be either one of the following algorithms: `RS256`, `RS384`, `RS512`, `PS256`, `PS384`, `PS512`, `RSA-OAEP`, `RSA-OAEP-256`, `RSA-OAEP-384`, or `RSA-OAEP-512`.
+  * **extractable** (`<boolean>`) (default: _true_)
+    * when `true`, the returned `CryptoKey` can be exported to other formats (i.e. `raw`, `pkcs8`, `spki`, or `jwk`)
+* **Returns:**
+  * **key** (`<CryptoKey>`)
