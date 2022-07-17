@@ -12,8 +12,7 @@ function isInputAlgorithmValid(alg: string) {
     return false;
 }
 
-export default async function generateKeyPair(alg: string) {
-    let extractable = true;
+export default async function generateKeyPair(alg: string, extractable: boolean = true) {
     let secret;
 
     if (!isInputAlgorithmValid(alg)) {
