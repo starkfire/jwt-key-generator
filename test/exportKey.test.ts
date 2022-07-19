@@ -1,3 +1,5 @@
+import { isCryptoKey } from "util/types";
+
 import generateSecret from "../src/generateSecret";
 import generateKeyPair from "../src/generateKeyPair";
 import exportKey from "../src/utils/exportKey";
@@ -10,9 +12,9 @@ import getCurve from "../src/ecdsa/getCurve";
 describe("Test exportKey()", () => {
     test("should be able to export keys under HMAC_SHA algorithms", async () => {
         SYNC_ALGS['HMAC_SHA'].forEach(async alg => {
-            let secret = await generateSecret(alg, true);
+            let secret = await generateSecret(alg);
 
-            if (secret) {
+            if (secret && isCryptoKey(secret)) {
                 for(let format in CMatrix) {
                     const isSupportedByFormat = CMatrix[format].includes('HMAC');
     
@@ -28,9 +30,9 @@ describe("Test exportKey()", () => {
 
     test("should be able to export keys under AES_KW algorithms", async () => {
         SYNC_ALGS['AES_KW'].forEach(async alg => {
-            let secret = await generateSecret(alg, true);
+            let secret = await generateSecret(alg);
 
-            if (secret) {
+            if (secret && isCryptoKey(secret)) {
                 for (let format in CMatrix) {
                     const isSupportedByFormat = CMatrix[format].includes('AES-KW');
 
@@ -46,9 +48,9 @@ describe("Test exportKey()", () => {
 
     test("should be able to export keys under AES_GCM algorithms", async () => {
         SYNC_ALGS['AES_GCM'].forEach(async alg => {
-            let secret = await generateSecret(alg, true);
+            let secret = await generateSecret(alg);
 
-            if (secret) {
+            if (secret && isCryptoKey(secret)) {
                 for (let format in CMatrix) {
                     const isSupportedByFormat = CMatrix[format].includes('AES-GCM');
 
