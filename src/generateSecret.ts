@@ -1,6 +1,34 @@
+import { KeyObject } from "node:crypto";
+
 import generateHMACKey from "./hmac/generateHMACKey";
 import generateAESKey from "./aes/generateAESKey";
 import { SYNC_ALGS } from "./algorithms";
+
+interface Options {
+    [index: string]: boolean | undefined;
+
+    /**
+     * determines whether generateSecret() method exports the CryptoKey
+     * in a manner which allows subtle.export() to transform it for other
+     * formats.
+     */
+    extractable?: boolean;
+
+    /**
+     * optional property for generateSecret(). If true, it tells the function 
+     * to return the CryptoKey as a KeyObject
+     */
+    toKeyObject?: boolean;
+}
+
+const optionsSchema: Options = {
+    extractable: true,
+    toKeyObject: false
+}
+
+function isOptionsValid(options: object) {
+    return Object.keys(options).filter(key => !optionsSchema.hasOwnProperty(key))
+}
 
 function isInputAlgorithmValid(alg: string) {
     for (let algType in SYNC_ALGS) {
@@ -12,8 +40,16 @@ function isInputAlgorithmValid(alg: string) {
     return false;
 }
 
-export default async function generateSecret(alg: string, extractable: boolean = true) {
+export default async function generateSecret(alg: string, options: Options = optionsSchema) {
     let secret;
+    let extractable = options.extractable ?? true;
+    
+    let optionErrors = isOptionsValid(options)
+    if (optionErrors.length > 0) {
+        optionErrors.map(key => {
+            throw new Error(`${key} is not a valid option for generateSecret()`)
+        })
+    }
 
     if (!isInputAlgorithmValid(alg)) {
         throw new Error('Invalid Symmetric Algorithm');
@@ -30,6 +66,10 @@ export default async function generateSecret(alg: string, extractable: boolean =
     if (SYNC_ALGS.AES_GCM.includes(alg)) {
         secret = await generateAESKey(alg, extractable, ['encrypt', 'decrypt']);
     }
+
+    secret = (options.toKeyObject && secret) 
+                ? KeyObject.from(secret) 
+                : secret;
 
     return secret;
 }
