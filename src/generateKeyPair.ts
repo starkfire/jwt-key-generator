@@ -39,7 +39,7 @@ export default async function generateKeyPair(alg: string, options: Options = op
 
     let optionErrors = isOptionsValid(options);
     if (optionErrors.length > 0) {
-        optionErrors.map(key => {
+        optionErrors.forEach((key) => {
             throw new Error(`${key} is not a valid option for generateKeyPair()`);
         });
     }

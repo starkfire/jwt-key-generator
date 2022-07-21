@@ -46,7 +46,7 @@ export default async function generateSecret(alg: string, options: Options = opt
     
     let optionErrors = isOptionsValid(options);
     if (optionErrors.length > 0) {
-        optionErrors.map(key => {
+        optionErrors.forEach((key) => {
             throw new Error(`${key} is not a valid option for generateSecret()`);
         });
     }
@@ -67,9 +67,7 @@ export default async function generateSecret(alg: string, options: Options = opt
         secret = await generateAESKey(alg, extractable, ['encrypt', 'decrypt']);
     }
 
-    secret = (options.toKeyObject && secret) 
+    return (options.toKeyObject && secret) 
                 ? KeyObject.from(secret) 
                 : secret;
-
-    return secret;
 }
