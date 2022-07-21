@@ -3,7 +3,7 @@ const { subtle } = require('node:crypto').webcrypto;
 import getRSAType from "./getRSAType";
 
 function getHashType(alg: string) {
-    const length = parseInt(alg.substr(-3), 10);
+    const length = parseInt(alg.slice(-3), 10);
 
     if (isNaN(length)) return 'SHA-1';
 
@@ -28,12 +28,10 @@ export default async function generateRSAKey(alg: string, extractable: boolean) 
 
     const keyUsages = getKeyUsages(RSAType);
 
-    let key = await subtle.generateKey({
+    return await subtle.generateKey({
         name: RSAType,
         modulusLength: 2048,
         publicExponent: new Uint8Array([1, 0, 1]),
         hash: getHashType(alg),
     }, extractable, keyUsages);
-
-    return key;
 }

@@ -5,11 +5,9 @@ export default async function generateHMACKey(alg: string, extractable: boolean,
 
     let hash = { name: `SHA-${length}` };
     
-    let key = await subtle.generateKey({
+    return await subtle.generateKey({
         name: 'HMAC',
         hash,
         length
     }, extractable, keyUsages);
-
-    return key;
 }
