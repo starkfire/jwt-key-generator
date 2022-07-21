@@ -66,7 +66,7 @@ describe("Test exportKey()", () => {
 
     test("should be able to export keys under RSA algorithms", async () => {
         ASYNC_ALGS['RSA'].forEach(async alg => {
-            let secret = await generateKeyPair(alg, true);
+            let secret = await generateKeyPair(alg);
             let rsaType = getRSAType(alg);
 
             if (secret && rsaType) {
@@ -87,7 +87,7 @@ describe("Test exportKey()", () => {
 
     test("should be able to export keys under ECDSA algorithms", async () => {
         ASYNC_ALGS['ECDSA'].forEach(async alg => {
-            let secret = await generateKeyPair(alg, true);
+            let secret = await generateKeyPair(alg);
             let ecdsaType = getCurve(alg);
 
             if (secret && ecdsaType) {
