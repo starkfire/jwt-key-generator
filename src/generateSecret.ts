@@ -24,10 +24,10 @@ interface Options {
 const optionsSchema: Options = {
     extractable: true,
     toKeyObject: false
-}
+};
 
 function isOptionsValid(options: object) {
-    return Object.keys(options).filter(key => !optionsSchema.hasOwnProperty(key))
+    return Object.keys(options).filter(key => !optionsSchema.hasOwnProperty(key));
 }
 
 function isInputAlgorithmValid(alg: string) {
@@ -44,11 +44,11 @@ export default async function generateSecret(alg: string, options: Options = opt
     let secret;
     let extractable = options.extractable ?? true;
     
-    let optionErrors = isOptionsValid(options)
+    let optionErrors = isOptionsValid(options);
     if (optionErrors.length > 0) {
         optionErrors.map(key => {
-            throw new Error(`${key} is not a valid option for generateSecret()`)
-        })
+            throw new Error(`${key} is not a valid option for generateSecret()`);
+        });
     }
 
     if (!isInputAlgorithmValid(alg)) {
