@@ -11,6 +11,18 @@ describe("Test generateKeyPair()", () => {
         expect(isCryptoKey(secret.privateKey)).toEqual(true);
     });
 
+    test("should return an error if an invalid option property is passed as an argument", async () => {
+        const invalidProperty = 'notValidProperty';
+
+        try {
+            await generateKeyPair('RS256', { [invalidProperty]: true });
+        } catch (error) {
+            if (error instanceof Error) {
+                expect(error.message).toBe(`${invalidProperty} is not a valid option for generateKeyPair()`);
+            }
+        }
+    });
+
     test("should return an error if an invalid algorithm is placed as an argument", async () => {
         try {
             await generateKeyPair('HS256');

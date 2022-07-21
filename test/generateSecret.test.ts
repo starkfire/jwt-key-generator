@@ -1,4 +1,4 @@
-import { isCryptoKey } from "util/types";
+import { isCryptoKey, isKeyObject } from "util/types";
 
 import { SYNC_ALGS } from "../src/algorithms";
 import generateSecret from "../src/generateSecret";
@@ -8,6 +8,24 @@ describe("Test generateSecret()", () => {
         const secret = await generateSecret('A128KW');
 
         expect(isCryptoKey(secret)).toEqual(true);
+    });
+
+    test("should return a KeyObject", async () => {
+        const secret = await generateSecret('A128KW', { toKeyObject: true });
+        
+        expect(isKeyObject(secret)).toEqual(true);
+    });
+
+    test("should return an error if an invalid option property is passed as an argument", async () => {
+        const invalidProperty = 'notValidProperty';
+
+        try {
+            await generateSecret('HS256', { [invalidProperty]: true });
+        } catch (error) {
+            if (error instanceof Error) {
+                expect(error.message).toBe(`${invalidProperty} is not a valid option for generateSecret()`);
+            }
+        }
     });
 
     test("should return an error if an invalid algorithm is placed as an argument", async () => {
