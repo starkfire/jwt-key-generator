@@ -4,7 +4,7 @@ export default async function generateAESKey(alg: string, extractable: boolean, 
     const length = parseInt(alg.slice(1, 4), 10);
     const isGCM = (alg.slice(-3) == 'GCM' || alg.slice(-5, 3) == 'GCM');
     
-    return await subtle.generateKey({
+    return subtle.generateKey({
         name: (isGCM) ? 'AES-GCM' : 'AES-KW',
         length
     }, extractable, keyUsages);

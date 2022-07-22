@@ -28,7 +28,7 @@ export default async function generateRSAKey(alg: string, extractable: boolean) 
 
     const keyUsages = getKeyUsages(RSAType);
 
-    return await subtle.generateKey({
+    return subtle.generateKey({
         name: RSAType,
         modulusLength: 2048,
         publicExponent: new Uint8Array([1, 0, 1]),
