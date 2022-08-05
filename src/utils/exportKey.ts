@@ -13,21 +13,23 @@ export default async function exportKey(key: CryptoKey, format: string) {
         throw new Error('Invalid Format Argument');
     }
 
-    if (!key?.extractable) {
+    if (!key.extractable) {
         throw new Error('Input Key is not extractable');
     }
 
-    if (!isFormatSupported(key?.algorithm?.name, format)) {
+    if (!isFormatSupported(key.algorithm.name, format)) {
         throw new Error("Target format does not support the key's algorithm");
     }
 
-    try {
-        let exportable = await subtle.exportKey(format, key);
-
-        return exportable;
-    } catch (err) {
-        if (err instanceof Error) {
-            throw new Error(err.message);
-        }
+    // PKCS8 should only support private keys
+    if (key.type != 'private' && format == 'pkcs8') {
+        throw new Error("Cannot export public keys as PKCS8");
     }
+
+    // SPKI should only support public keys
+    if (key.type != 'public' && format == 'spki') {
+        throw new Error("Cannot export private keys as SPKI");
+    }
+
+    return subtle.exportKey(format, key);
 }
