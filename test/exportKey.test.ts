@@ -70,17 +70,22 @@ describe("Test exportKey()", () => {
             let rsaType = getRSAType(alg);
 
             if (secret && rsaType) {
-                for (let format in CMatrix) {
-                    const isSupportedByFormat = CMatrix[format].includes(rsaType);
+                let { publicKey, privateKey } = secret;
 
-                    if (isSupportedByFormat) {
-                        let pub = await exportKey(secret.publicKey, format);
-                        let pvt = await exportKey(secret.privateKey, format);
+                // JWK
+                let jwk_pub = await exportKey(publicKey, 'jwk');
+                let jwk_pvt = await exportKey(privateKey, 'jwk');
 
-                        if (pub) expect(pub).not.toBeUndefined();
-                        if (pvt) expect(pvt).not.toBeUndefined();
-                    }
-                }
+                // SPKI
+                let spki_pub = await exportKey(publicKey, 'spki');
+                
+                // PKCS8
+                let pkcs8_pvt = await exportKey(privateKey, 'pkcs8');
+                
+                expect(jwk_pub).not.toBeUndefined();
+                expect(jwk_pvt).not.toBeUndefined();
+                expect(spki_pub).not.toBeUndefined();
+                expect(pkcs8_pvt).not.toBeUndefined();
             }
         });
     });
