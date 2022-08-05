@@ -42,7 +42,11 @@ const { generateKeyPair } = require('jwt-key-generator');
 
 const secret = await generateKeyPair('RS256');
 
-console.log(secret);        // CryptoKey
+// Public Key
+console.log(secret.publicKey);          // CryptoKey
+
+// Private Key
+console.log(secret.privateKey);         // CryptoKey
 ```
 ### Generate a Secret Key and return as `KeyObject`
 
@@ -133,6 +137,7 @@ If you are interested to submit issues and pull requests, contributions are high
         * default value is `true`
 * **Returns:**
   * **key** (`<CryptoKey>`)
+    * returns an object which contains `publicKey` and `privateKey`
 
 ### `exportKey(key, format)`
 * returns a `CryptoKey` on a different format (`spki`/`pkcs8`/`jwk`/`raw`)
