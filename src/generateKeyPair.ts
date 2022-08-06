@@ -1,3 +1,5 @@
+import { KeyObject } from 'node:crypto';
+
 import generateRSAKey from './rsa/generateRSAKey';
 import generateECDSAKey from './ecdsa/generateECDSAKey';
 import { ASYNC_ALGS } from './algorithms';
@@ -12,11 +14,16 @@ interface Options {
      */
      extractable?: boolean;
 
-    // TODO: support for `toKeyObject` option
+    /**
+     * optional property for generateKeyPair(). If true, it tells the function 
+     * to return the CryptoKey as a KeyObject
+     */
+     toKeyObject?: boolean;
 }
 
 const optionsSchema: Options = {
-    extractable: true
+    extractable: true,
+    toKeyObject: false
 }
 
 function isOptionsValid(options: object) {
@@ -54,6 +61,17 @@ export default async function generateKeyPair(alg: string, options: Options = op
 
     if (ASYNC_ALGS.ECDSA.includes(alg)) {
         secret = await generateECDSAKey(alg, extractable);
+    }
+
+    // return secret;
+
+    if (options.toKeyObject && secret) {
+        let { publicKey, privateKey } = secret;
+
+        return {
+            publicKey: KeyObject.from(publicKey),
+            privateKey: KeyObject.from(privateKey)
+        };
     }
 
     return secret;
