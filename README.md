@@ -66,11 +66,8 @@ This allows you to conveniently use this library with JWT libraries such as [jso
 const { generateSecret } = require('jwt-key-generator');
 
 let secret = await generateSecret('HS256', { toKeyObject: true });
-
-console.log(secret);        // KeyObject
+let keypair = await generateKeyPair('RS256', { toKeyObject: true });
 ```
-
-**Note:** this feature is not yet supported by `generateKeyPair()`.
 
 ### Convert or export key to a different format
 You can also convert the key to other formats supported by Web Crypto API's [subtle.exportKey()](https://nodejs.org/api/webcrypto.html#subtleexportkeyformat-key): `spki`, `pkcs8`, `jwk`, and `raw`.
@@ -143,6 +140,9 @@ If you are interested to submit issues and pull requests, contributions are high
       * `extractable` (`<boolean>`)
         * when `true`, the returned `CryptoKey` can be exported to other formats using `exportKey()`
         * default value is `true`
+      * `toKeyObject` (`<boolean>`)
+        * if `true`, the public and private keys will be returned as `KeyObject` instead of `CryptoKey`
+        * default value is `false`
 * **Returns:**
   * **key** (`<object>`)
     * returns an object which contains the key pair
