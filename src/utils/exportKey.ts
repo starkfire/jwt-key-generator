@@ -31,5 +31,10 @@ export default async function exportKey(key: CryptoKey, format: string) {
         throw new Error("Cannot export private keys as SPKI");
     }
 
+    // raw should only support public keys
+    if (key.type == 'private' && format == 'raw') {
+        throw new Error("Cannot export private keys as raw");
+    }
+
     return subtle.exportKey(format, key);
 }
