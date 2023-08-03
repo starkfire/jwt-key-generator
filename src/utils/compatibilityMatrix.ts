@@ -1,7 +1,7 @@
 // Refer to https://nodejs.org/api/webcrypto.html#subtleexportkeyformat-key
 
-interface CompatibilityMatrix {
-    [type: string]: string[]
+type CompatibilityMatrix = {
+    [key: string]: string[];
 }
 
 const compatibilityMatrix: CompatibilityMatrix = {
