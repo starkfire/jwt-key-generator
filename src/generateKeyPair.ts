@@ -63,8 +63,6 @@ export default async function generateKeyPair(alg: string, options: Options = op
         secret = await generateECDSAKey(alg, extractable);
     }
 
-    // return secret;
-
     if (options.toKeyObject && secret) {
         let { publicKey, privateKey } = secret;
 
