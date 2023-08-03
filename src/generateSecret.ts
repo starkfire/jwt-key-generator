@@ -64,7 +64,7 @@ export default async function generateSecret(alg: string, options: Options = opt
     }
 
     if (SYNC_ALGS.AES_GCM.includes(alg)) {
-        if (alg.slice(-2) == 'KW') {
+        if (alg.endsWith('KW')) {
             secret = await generateAESKey(alg, extractable, ['wrapKey', 'unwrapKey']);
         } else {
             secret = await generateAESKey(alg, extractable, ['encrypt', 'decrypt']);
