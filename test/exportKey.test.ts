@@ -7,7 +7,6 @@ import CMatrix from "../src/utils/compatibilityMatrix";
 import { SYNC_ALGS, ASYNC_ALGS } from "../src/algorithms";
 
 import getRSAType from "../src/rsa/getRSAType";
-import getCurve from "../src/ecdsa/getCurve";
 
 describe("Test exportKey()", () => {
     test("should be able to export keys under HMAC_SHA algorithms", async () => {
