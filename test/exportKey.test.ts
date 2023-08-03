@@ -11,7 +11,7 @@ import getCurve from "../src/ecdsa/getCurve";
 
 describe("Test exportKey()", () => {
     test("should be able to export keys under HMAC_SHA algorithms", async () => {
-        SYNC_ALGS['HMAC_SHA'].forEach(async alg => {
+        for (const alg of SYNC_ALGS['HMAC_SHA']) {
             let secret = await generateSecret(alg);
 
             if (secret && isCryptoKey(secret)) {
@@ -25,11 +25,11 @@ describe("Test exportKey()", () => {
                     }
                 }
             }
-        });
+        }
     });
 
     test("should be able to export keys under AES_KW algorithms", async () => {
-        SYNC_ALGS['AES_KW'].forEach(async alg => {
+        for (const alg of SYNC_ALGS['AES_KW']) {
             let secret = await generateSecret(alg);
 
             if (secret && isCryptoKey(secret)) {
@@ -43,11 +43,11 @@ describe("Test exportKey()", () => {
                     }
                 }
             }
-        });
+        }
     });
 
     test("should be able to export keys under AES_GCM algorithms", async () => {
-        SYNC_ALGS['AES_GCM'].forEach(async alg => {
+        for (const alg of SYNC_ALGS['AES_GCM']) {
             let secret = await generateSecret(alg);
 
             if (secret && isCryptoKey(secret)) {
@@ -61,11 +61,11 @@ describe("Test exportKey()", () => {
                     }
                 }
             }
-        });
+        }
     });
 
     test("should be able to export keys under RSA algorithms", async () => {
-        ASYNC_ALGS['RSA'].forEach(async alg => {
+        for (const alg of ASYNC_ALGS['RSA']) {
             let secret = await generateKeyPair(alg);
             let rsaType = getRSAType(alg);
 
@@ -87,27 +87,35 @@ describe("Test exportKey()", () => {
                 expect(spki_pub).not.toBeUndefined();
                 expect(pkcs8_pvt).not.toBeUndefined();
             }
-        });
+        }
     });
 
     test("should be able to export keys under ECDSA algorithms", async () => {
-        ASYNC_ALGS['ECDSA'].forEach(async alg => {
+        for (const alg of ASYNC_ALGS['ECDSA']) {
             let secret = await generateKeyPair(alg);
-            let ecdsaType = getCurve(alg);
 
-            if (secret && ecdsaType) {
-                for (let format in CMatrix) {
-                    const isSupportedByFormat = CMatrix[format].includes(ecdsaType);
+            if (secret) {
+                let { publicKey, privateKey } = secret;
 
-                    if (isSupportedByFormat) {
-                        let pub = await exportKey(secret.publicKey, format);
-                        let pvt = await exportKey(secret.privateKey, format);
+                // JWK
+                let jwk_pub = await exportKey(publicKey, 'jwk');
+                let jwk_pvt = await exportKey(privateKey, 'jwk');
 
-                        if (pub) expect(pub).not.toBeUndefined();
-                        if (pvt) expect(pvt).not.toBeUndefined();
-                    }
-                }
+                // SPKI
+                let spki_pub = await exportKey(publicKey, 'spki');
+
+                // PKCS8
+                let pkcs8_pvt = await exportKey(privateKey, 'pkcs8');
+
+                // raw
+                let raw_pub = await exportKey(publicKey, 'raw');
+
+                expect(jwk_pub).not.toBeUndefined();
+                expect(jwk_pvt).not.toBeUndefined();
+                expect(spki_pub).not.toBeUndefined();
+                expect(pkcs8_pvt).not.toBeUndefined();
+                expect(raw_pub).not.toBeUndefined();
             }
-        });
+        }
     });
 });
